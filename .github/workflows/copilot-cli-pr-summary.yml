@@ -42,40 +42,28 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ai-summary
-          path: ai-summary.md
+          path: |
+            ai-summary.md
+            changed-files.txt
           if-no-files-found: error
   publish:
     needs: generate
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
           name: ai-summary
-      - name: Update the PR body if the head is unchanged
+      - name: Publish CLI result as a PR review
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
-        run: |
-          current=$(gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --jq .head.sha)
-          test "$current" = "$EXPECTED_HEAD"
-          gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --jq '.body // ""' > pr-body.txt
-          python3 - <<'PY'
-          from pathlib import Path
-
-          body = Path("pr-body.txt").read_text()
-          summary = Path("ai-summary.md").read_text()
-          if len(summary) > 30000:
-              raise ValueError("AI summary exceeds POC size limit")
-          start, end = "<!-- ai-summary:start -->", "<!-- ai-summary:end -->"
-          summary = summary.replace(start, "").replace(end, "").strip()
-          if start in body or end in body:
-              if body.count(start) != 1 or body.count(end) != 1 or body.index(start) > body.index(end):
-                  raise ValueError("Invalid AI summary markers in PR body")
-              body = body[:body.index(start)] + body[body.index(end) + len(end):]
-          Path("new-body.txt").write_text(body.rstrip() + "\n\n" + start + "\n" + summary + "\n" + end + "\n")
-          PY
-          gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --method PATCH -f "body=$(cat new-body.txt)" --silent
+        run: python3 .github/scripts/publish_review.py
