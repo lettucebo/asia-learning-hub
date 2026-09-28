@@ -96,7 +96,7 @@ When responding:
 
 ---
 
-### Sample Prompts
+### Started Prompts
 
 #### Customer Meeting Preparation
 
@@ -114,28 +114,24 @@ When responding:
 
 > Are there any risks, service issues, or pending actions that I should be aware of before my meeting?
 
-#### Executive Briefing
-
-> Create a one-page customer briefing for ABC Manufacturing.
-
-#### Product Expansion
-
-> Which additional banking products may be relevant for this customer based on their current portfolio?
-
-#### Relationship Health Check
-
-> Assess the overall health of this customer relationship and identify areas requiring attention.
-
-#### Follow-up Preparation
-
-> Generate follow-up actions from my last meeting with ABC Manufacturing.
-
-#### Portfolio Review
-
-> Show all active products, recent activities, and key opportunities for this customer.
-
-#### Next Best Conversation
-
-> I'm meeting the CFO of ABC Manufacturing. What topics should I discuss to strengthen the relationship and uncover new opportunities?
-
 ---
+
+### Knowledge Sources
+
+> **Download the demo knowledge source package from:**  
+> `industry/FSI/Agent Builder/data files/Relationship Manager Agent Demo Pack.zip`
+>
+> Upload all files from this package as **Knowledge Sources** in Agent Builder before testing the agent. The package contains fictional customer profiles, meeting notes, product portfolios, service requests, risk summaries, and relationship management guidance specifically designed for the Relationship Manager Assistant demo.
+
+### Demo Prompt
+
+Once the knowledge sources are uploaded, try the following prompt:
+
+```text
+Prepare me for my upcoming meeting with ABC Manufacturing.
+
+Provide the customer profile, products currently used, recent discussions, open service requests, risks, potential growth opportunities, recommended questions, and next actions.
+
+Clearly identify any missing information or items requiring specialist validation.
+```
+
