@@ -118,7 +118,7 @@ When responding:
 
 ### Knowledge Sources
 
-> **Download the demo knowledge source package:**  
+> **Download the demo knowledge source package:**
 > [Relationship Manager Agent Demo Pack.zip](data-files/Relationship%20Manager%20Agent%20Demo%20Pack.zip)
 >
 > Upload all files from this package as **Knowledge Sources** in Agent Builder before testing the agent. The package contains fictional customer profiles, meeting notes, product portfolios, service requests, risk summaries, and relationship management guidance specifically designed for the Relationship Manager Assistant demo.
