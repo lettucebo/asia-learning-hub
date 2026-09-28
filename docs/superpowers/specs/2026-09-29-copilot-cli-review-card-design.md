@@ -27,8 +27,9 @@ whether the new skill was used.
 
 The `generate` job continues to collect the diff and changed-file list, run
 the `pr-summary` custom agent, and upload its Markdown artifact. The `publish`
-job receives only `pull-requests: write`, checks that the PR head SHA still
-matches the event, formats the summary as a Markdown review body, and posts it
+job receives `contents: read` to load its publisher from the trusted base
+commit plus `pull-requests: write`, checks that the PR head SHA still matches
+the event, formats the summary as a Markdown review body, and posts it
 through `POST /repos/{owner}/{repo}/pulls/{number}/reviews` with
 `event: COMMENT`. It no longer edits the PR description. The review author
 will be `github-actions[bot]`, not Copilot.
