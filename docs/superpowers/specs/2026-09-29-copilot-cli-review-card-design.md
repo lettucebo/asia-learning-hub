@@ -1,12 +1,29 @@
-# Copilot CLI review card POC
+# Copilot review skill and CLI review card POC
 
 ## Goal
 
-Present the existing Copilot CLI PR summary as a GitHub pull request review
-rather than appended text in the PR description. Keep Copilot code review (A)
-and the structure check (C) unchanged.
+Compare an improved Copilot code review (A) with a Copilot CLI summary presented
+as a pull request review card (B), using new PASS and FAIL PRs against the same
+isolated base branch. Keep the deterministic structure check (C) unchanged.
 
-## Design
+## A: Code review skill
+
+Add `.github/skills/code-review/SKILL.md` with review-focused frontmatter and
+instructions to use `RULE.md` and the existing `.github/copilot-instructions.md`.
+Ask for an overview listing **every** changed file, including the name and
+role of binary files without claiming to inspect their contents, and the
+affected industry, product, use case, and POC rule findings. Distinguish
+repository-wide minimum use-case counts from checks of changed use cases;
+do not misrepresent either as the other. Do not add MCP servers or duplicate
+the full rule set in the skill.
+
+GitHub decides when relevant skills are loaded, and the overview format is
+controlled by Copilot code review. This experiment measures whether a focused
+skill increases file coverage; it cannot guarantee B's output shape or update
+the PR description. Inspect review attributions or session logs to determine
+whether the new skill was used.
+
+## B: CLI review card
 
 The `generate` job continues to collect the diff and changed-file list, run
 the `pr-summary` custom agent, and upload its Markdown artifact. The `publish`
@@ -29,18 +46,33 @@ a new review. It must fail explicitly when the AI output or marker is invalid.
 
 Test the review-body formatter with FAIL and PASS sample output, including
 HTML/Markdown formatting, complete changed-file coverage, missing verdict,
-and duplicate publication. Run the existing four structure-check tests.
-Verify a live FAIL and PASS PR: both get a B review card by
-`github-actions[bot]`, no new B-generated PR description block, no duplicate
-review for the same head SHA, and A/C results remain unchanged. New PRs or
-reopening the closed POC PRs require separate user approval.
+and duplicate publication. Check the `SKILL.md` frontmatter and instructions
+against the documented skill format. Run the existing four structure-check
+tests.
+
+Update `e2e/base`, then create new FAIL and PASS head branches **from the
+updated base** so the skill is present in each head branch when A reviews the
+PR. Replay the same twelve historical commits for FAIL and add the same
+compliant use case for PASS. Verify in both PRs:
+
+* A runs automatically, flags STRUCT-01/02/04 on FAIL and no POC structural
+  violations on PASS; record its exact changed-file coverage and distinguish
+  separate repository-wide advice. Check if the skill was used through
+  attributions or session logs.
+* B posts one `github-actions[bot]` review card with every changed file and
+  the correct verdict, without writing a new PR description block. A rerun
+  on the same SHA does not create a duplicate review.
+* C remains FAILURE with three issues on FAIL and SUCCESS with none on PASS.
+
+Compare against the previous closed PRs #1 and #2; write the results in the
+session report, then close the two new PRs without merging. Leave `main` and
+the old PRs unchanged.
 
 ## Limits and alternative
 
 Beautifying the PR description alone would be simpler but would not create a
 review timeline card. Posting line-specific review comments would more closely
 match native Copilot review but requires exact diff positions and duplicates
-A's findings, so it is outside this POC. A repository `code-review` agent skill
-could improve A's relevance, but GitHub decides when to use it and does not
-guarantee complete per-file output. It is a separate experiment, not a
-substitute for this deterministic publication path.
+A's findings, so it is outside this POC. A custom instruction alone already
+omitted the binary ZIP from both prior overviews; the skill is a focused second
+experiment, not a substitute for B's explicit per-file publication path.
