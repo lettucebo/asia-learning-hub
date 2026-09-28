@@ -1,0 +1,81 @@
+name: Copilot CLI summary (POC)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions: {}
+concurrency:
+  group: ai-summary-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  generate:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      copilot-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Capture the PR diff
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff --no-ext-diff "$BASE_SHA...$HEAD_SHA" -- industry/ > pr.diff
+          git diff --name-status --no-ext-diff "$BASE_SHA...$HEAD_SHA" -- industry/ > changed-files.txt
+      - name: Generate summary with custom agent
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npm install -g @github/copilot
+          copilot --agent pr-summary --model gpt-6-sol \
+            -p 'Read RULE.md, .github/copilot-instructions.md, pr.diff, and changed-files.txt. Summarize and check only the changed use cases in Markdown with the format specified by this agent.' \
+            -s --available-tools=view --allow-tool=read --no-ask-user > ai-summary.md
+          test -s ai-summary.md
+          grep -Eq '^Verdict: (PASS|FAIL)$' ai-summary.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ai-summary
+          path: ai-summary.md
+          if-no-files-found: error
+  publish:
+    needs: generate
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ai-summary
+      - name: Update the PR body if the head is unchanged
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          current=$(gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --jq .head.sha)
+          test "$current" = "$EXPECTED_HEAD"
+          gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --jq '.body // ""' > pr-body.txt
+          python3 - <<'PY'
+          from pathlib import Path
+
+          body = Path("pr-body.txt").read_text()
+          summary = Path("ai-summary.md").read_text()
+          if len(summary) > 30000:
+              raise ValueError("AI summary exceeds POC size limit")
+          start, end = "<!-- ai-summary:start -->", "<!-- ai-summary:end -->"
+          summary = summary.replace(start, "").replace(end, "").strip()
+          if start in body or end in body:
+              if body.count(start) != 1 or body.count(end) != 1 or body.index(start) > body.index(end):
+                  raise ValueError("Invalid AI summary markers in PR body")
+              body = body[:body.index(start)] + body[body.index(end) + len(end):]
+          Path("new-body.txt").write_text(body.rstrip() + "\n\n" + start + "\n" + summary + "\n" + end + "\n")
+          PY
+          gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --method PATCH -f "body=$(cat new-body.txt)" --silent
