@@ -1,0 +1,118 @@
+name: Use case review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions: {}
+concurrency:
+  group: use-case-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      copilot-requests: write
+    outputs:
+      ready: ${{ steps.validate.outputs.ready }}
+      summary: ${{ steps.validate.outputs.summary }}
+      changed_files: ${{ steps.validate.outputs.changed_files }}
+      rules_changed: ${{ steps.prepare.outputs.rules_changed }}
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      # Agent, instructions, rules, and scripts all come from the trusted base commit.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Decide whether to review
+        id: guard
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          reason=""
+          if [ "$HEAD_REPO" != "$BASE_REPO" ]; then
+            reason="Pull requests from forks do not run the Copilot review."
+          elif [ ! -f CONTRIBUTING.md ] || [ ! -f .github/scripts/prepare_review.py ] \
+              || [ ! -f .github/agents/use-case-review.agent.md ]; then
+            reason="The base branch does not contain the review rules and tooling yet."
+          fi
+          if [ -n "$reason" ]; then
+            printf '## Use case review skipped\n\n%s\n' "$reason" >> "$GITHUB_STEP_SUMMARY"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Fetch the pull request head
+        if: steps.guard.outputs.run == 'true'
+        run: git fetch --no-tags --quiet origin "$HEAD_SHA"
+      - name: Prepare review inputs
+        id: prepare
+        if: steps.guard.outputs.run == 'true'
+        run: |
+          python3 .github/scripts/prepare_review.py "$BASE_SHA" "$HEAD_SHA"
+          if [ "$(jq -r .skipped .review/metadata.json)" = "true" ]; then
+            printf '## Use case review skipped\n\n%s\n' \
+              "$(jq -r .reason .review/metadata.json)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.prepare.outputs.skipped == 'false'
+        with:
+          node-version: '24'
+      - name: Run the use-case-review agent with Copilot CLI
+        if: steps.prepare.outputs.skipped == 'false'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MODEL: ${{ vars.COPILOT_REVIEW_MODEL }}
+          MAX_AI_CREDITS: ${{ vars.COPILOT_REVIEW_MAX_AI_CREDITS || '100' }}
+        run: |
+          npm install -g @github/copilot --no-fund --no-audit --loglevel=error
+          args=(--agent use-case-review -s --no-ask-user --available-tools=view
+                --allow-tool=read --max-ai-credits "$MAX_AI_CREDITS")
+          if [ -n "$MODEL" ]; then args+=(--model "$MODEL"); fi
+          if ! copilot "${args[@]}" -p "$(cat .review/prompt.md)" \
+              > .review/ai-summary.md 2> .review/copilot-error.log; then
+            {
+              printf '## Use case review failed\n\n'
+              printf 'Copilot CLI exited with an error. If the log mentions authorization, '
+              printf 'billing, or policy, an organization owner must enable **Allow use of '
+              printf 'Copilot CLI billed to the organization** under Settings > Copilot > '
+              printf 'Policies > Copilot CLI.\n\n```text\n'
+              tail -n 40 .review/copilot-error.log
+              printf '\n```\n'
+            } >> "$GITHUB_STEP_SUMMARY"
+            cat .review/copilot-error.log >&2
+            exit 1
+          fi
+      - name: Validate the review output
+        id: validate
+        if: steps.prepare.outputs.skipped == 'false'
+        env:
+          RULES_CHANGED: ${{ steps.prepare.outputs.rules_changed }}
+        run: python3 .github/scripts/publish_review.py validate
+  publish:
+    needs: generate
+    if: needs.generate.outputs.ready == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - name: Publish the review to the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          RULES_CHANGED: ${{ needs.generate.outputs.rules_changed }}
+          AI_SUMMARY: ${{ needs.generate.outputs.summary }}
+          CHANGED_FILES: ${{ needs.generate.outputs.changed_files }}
+        run: python3 .github/scripts/publish_review.py publish
