@@ -1,7 +1,9 @@
 import unittest
 from pathlib import Path
 
-from publish_review import find_existing, publish_review, render_review
+from publish_review import (
+    find_existing, output_size_code_units, publish_review, render_review,
+)
 from review_common import parse_rule_ids
 
 SHA = "a" * 40
@@ -77,6 +79,9 @@ class RuleIdTests(unittest.TestCase):
     def test_missing_section_is_an_error(self):
         with self.assertRaisesRegex(ValueError, "Review checks"):
             parse_rule_ids("# Contributing\n")
+
+    def test_job_output_size_uses_utf16_code_units(self):
+        self.assertEqual(3, output_size_code_units("A", "😀"))
 
 
 class ReviewFormattingTests(unittest.TestCase):

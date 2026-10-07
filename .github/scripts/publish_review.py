@@ -14,6 +14,7 @@ from review_common import RULES_FILE, parse_rule_ids, require_sha, sha256_hex
 
 MARKER_PREFIX = "<!-- use-case-review:"
 MAX_SUMMARY_CHARS = 30000
+MAX_JOB_OUTPUT_CODE_UNITS = 900_000
 FILE_BULLET = re.compile(
     r"^-\s+\*\*(Added|Modified|Deleted|Renamed)\*\*\s+`([^`]+)`\s+[—-]\s+(.+)$",
     re.MULTILINE,
@@ -185,6 +186,10 @@ def multiline_output(name: str, value: str) -> str:
     return f"{name}<<{delimiter}\n{value}\n{delimiter}\n"
 
 
+def output_size_code_units(*values: str) -> int:
+    return sum(len(value.encode("utf-16-le")) // 2 for value in values)
+
+
 def env_flag(name: str) -> bool:
     value = os.environ.get(name, "false")
     if value not in ("true", "false"):
@@ -195,6 +200,8 @@ def env_flag(name: str) -> bool:
 def validate_command(review_dir: Path) -> None:
     summary = (review_dir / "ai-summary.md").read_text(encoding="utf-8")
     changed = (review_dir / "changed-files.txt").read_text(encoding="utf-8")
+    if output_size_code_units(summary, changed) > MAX_JOB_OUTPUT_CODE_UNITS:
+        raise ValueError("Review outputs exceed the safe GitHub Actions job output limit")
     render_review(summary, changed, os.environ["HEAD_SHA"],
                   Path(RULES_FILE).read_bytes(), os.environ["BASE_SHA"],
                   env_flag("RULES_CHANGED"))

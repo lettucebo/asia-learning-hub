@@ -124,9 +124,6 @@ every ID, for the use cases changed in that pull request only.
 | STRUCT-03 | The use case has `README.md`; Copilot-Studio, Foundry, and Fabric use cases also have `setup.md`. |
 | STRUCT-04 | Supporting files are in `data-files/` for Copilot, Agent-Builder, and Copilot-Studio; `source/` for Foundry; `notebook/` or `data/` for Fabric. |
 | CONTENT-01 | `README.md` describes the scenario, pain points, benefits, and demo steps; Agent-Builder use cases also describe the agent configuration. |
-| CONTENT-02 | `setup.md`, where present, describes the environment and the setup steps. |
-| CONTENT-03 | The use case references publicly available data, uses fictitious customer names, and keeps country specifics in a country/region sub-folder. |
-| CONTENT-04 | A Copilot-Studio use case provides one solution export per demo agent and follows the publisher and solution naming in the Copilot Studio agent guideline. |
 
 ## Self-check with your own Copilot CLI
 
@@ -142,8 +139,11 @@ you cloned this repository, or `upstream/main` if you work from a fork.
 Bash:
 
 ```bash
-git fetch origin main
-python3 .github/scripts/prepare_review.py origin/main HEAD
+base_remote=origin
+if git remote get-url upstream >/dev/null 2>&1; then base_remote=upstream; fi
+git fetch "$base_remote" main
+if ! python3 .github/scripts/prepare_review.py "$base_remote/main" HEAD; then exit 1; fi
+if grep -q '"skipped": true' .review/metadata.json; then exit 0; fi
 copilot --agent use-case-review -s --available-tools=view --allow-tool=read \
   -p "$(cat .review/prompt.md)"
 ```
@@ -151,8 +151,11 @@ copilot --agent use-case-review -s --available-tools=view --allow-tool=read \
 PowerShell 7:
 
 ```powershell
-git fetch origin main
-python .github/scripts/prepare_review.py origin/main HEAD
+$baseRemote = if (git remote get-url upstream 2>$null) { "upstream" } else { "origin" }
+git fetch $baseRemote main
+python .github/scripts/prepare_review.py "$baseRemote/main" HEAD
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+if ((Get-Content .review/metadata.json -Raw | ConvertFrom-Json).skipped) { exit 0 }
 copilot --agent use-case-review -s --available-tools=view --allow-tool=read `
   -p (Get-Content .review/prompt.md -Raw)
 ```

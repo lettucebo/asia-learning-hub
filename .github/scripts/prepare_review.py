@@ -17,7 +17,6 @@ from review_common import RULES_FILE, parse_rule_ids, sha256_hex
 
 SCOPE = "industry/"
 OWNED_MARKER = ".generated-by-prepare-review"
-MAX_HEAD_FILE_BYTES = 200_000
 DOC_FILES = ("README.md", "setup.md")
 
 
@@ -54,28 +53,60 @@ def changed_entries(repo: Path, base: str, head: str) -> list[tuple[str, list[st
 
 
 def is_text(data: bytes) -> bool:
-    return len(data) <= MAX_HEAD_FILE_BYTES and b"\0" not in data[:8000]
+    return b"\0" not in data[:8000]
+
+
+def use_case_for(path: PurePosixPath) -> tuple[PurePosixPath, int] | None:
+    parts = path.parts
+    if len(parts) < 3 or parts[0] != "industry":
+        return None
+    product_index = (
+        2 if parts[2] in {
+            "Copilot", "Agent-Builder", "Copilot-Studio", "Foundry", "Fabric"
+        } else
+        3 if len(parts) > 3 and (parts[3] in {
+            "Copilot", "Agent-Builder", "Copilot-Studio", "Foundry", "Fabric"
+        } or len(parts) >= 6) else
+        2
+    )
+    if len(parts) <= product_index + 1:
+        return None
+    return PurePosixPath(*parts[:product_index + 2]), product_index
 
 
 def head_files(repo: Path, head: str,
                entries: list[tuple[str, list[str]]]) -> dict[str, bytes]:
     files: dict[str, bytes] = {}
-    for status, paths in entries:
-        if status.startswith("D"):
-            continue
-        path = PurePosixPath(paths[-1])
-        candidates = [path.as_posix()]
-        for parent in path.parents:
-            if parent.as_posix() in (".", "industry"):
-                break
-            candidates += [(parent / name).as_posix() for name in DOC_FILES]
-        for candidate in candidates:
-            if candidate in files:
+    candidates = set()
+    for _, paths in entries:
+        for changed_path in paths:
+            path = PurePosixPath(changed_path)
+            if is_use_case_doc(path):
+                candidates.add(path.as_posix())
+            use_case = use_case_for(path)
+            if use_case is None:
                 continue
-            data = read_blob(repo, head, candidate)
-            if data is not None and is_text(data):
-                files[candidate] = data
+            folder, _ = use_case
+            candidates.update((folder / name).as_posix() for name in DOC_FILES)
+            if path.as_posix().endswith(DOC_FILES):
+                candidates.add(path.as_posix())
+
+    for candidate in sorted(candidates):
+        data = read_blob(repo, head, candidate)
+        if data is None:
+            continue
+        if not is_text(data):
+            continue
+        files[candidate] = data
+        if len(data) > 200_000:
+            raise ValueError(
+                f"Required review file exceeds 200,000 bytes: {candidate}"
+            )
     return files
+
+
+def is_use_case_doc(path: PurePosixPath) -> bool:
+    return path.name in DOC_FILES and use_case_for(path) is not None
 
 
 def build_prompt(base_sha: str, rules: str, rule_ids: list[str],
@@ -130,7 +161,8 @@ def prepare(base: str, head: str, out_dir: Path, repo: Path) -> dict:
         return result
 
     changed = "".join("\t".join([status, *paths]) + "\n" for status, paths in entries)
-    diff = git(repo, "diff", "--no-ext-diff", "-M", f"{base_sha}...{head_sha}",
+    diff = git(repo, "diff", "--no-ext-diff", "--no-renames",
+               f"{base_sha}...{head_sha}",
                "--", SCOPE).stdout
     files = head_files(repo, head_sha, entries)
 

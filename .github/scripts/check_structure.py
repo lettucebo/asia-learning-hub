@@ -24,20 +24,62 @@ class Issue:
     message: str
 
 
-def check_changed_use_cases(root: Path, changed_paths: list[str]) -> list[Issue]:
+def check_changed_use_cases(root: Path | None, changed_paths: list[str],
+                            head_paths: set[str] | None = None) -> list[Issue]:
+    def is_dir(path: Path) -> bool:
+        if head_paths is not None:
+            prefix = path.as_posix().rstrip("/") + "/"
+            return any(candidate.startswith(prefix) for candidate in head_paths)
+        return root is not None and (root / path).is_dir()
+
+    def is_file(path: Path) -> bool:
+        if head_paths is not None:
+            return path.as_posix() in head_paths
+        return root is not None and (root / path).is_file()
+
+    def children(path: Path) -> set[tuple[str, bool]]:
+        if head_paths is not None:
+            prefix = path.as_posix().rstrip("/") + "/"
+            result = set()
+            for candidate in head_paths:
+                if candidate.startswith(prefix):
+                    remainder = candidate[len(prefix):]
+                    first, separator, _ = remainder.partition("/")
+                    result.add((first, bool(separator)))
+            return result
+        if root is None:
+            return set()
+        return {
+            (child.name, child.is_dir())
+            for child in (root / path).iterdir()
+        }
+
     candidates = set()
+    issues = []
     for name in changed_paths:
         parts = Path(name).parts
-        if len(parts) < 5 or parts[0] != "industry":
+        if len(parts) < 3 or parts[0] != "industry":
             continue
-        product_index = 2 if parts[2] in PRODUCTS else 3 if parts[3] in PRODUCTS else 2
-        if len(parts) < product_index + 3:
+        product_index = (
+            2 if parts[2] in PRODUCTS else
+            3 if len(parts) > 3 and (parts[3] in PRODUCTS or len(parts) >= 6) else
+            2
+        )
+        if len(parts) <= product_index:
+            continue
+        if len(parts) == product_index + 2:
+            product_folder = parts[product_index]
+            path = Path(*parts)
+            if (product_folder in PRODUCTS or product_index == 2) and is_file(path):
+                issues.append(Issue(
+                    "STRUCT-01", path.as_posix(),
+                    "Use-case files must be inside a use-case directory",
+                ))
             continue
         folder = Path(*parts[: product_index + 2])
-        if (root / folder).is_dir():
+        if is_dir(folder):
             candidates.add((folder, product_index))
 
-    issues = []
     for folder, product_index in sorted(candidates):
         parts = folder.parts
         product = parts[product_index]
@@ -48,15 +90,15 @@ def check_changed_use_cases(root: Path, changed_paths: list[str]) -> list[Issue]
         if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", use_case):
             issues.append(Issue("STRUCT-02", relative, f"Use case must be kebab-case: {use_case}"))
         for required in ("README.md", "setup.md") if product in {"Copilot-Studio", "Foundry", "Fabric"} else ("README.md",):
-            if not (root / folder / required).is_file():
+            if not is_file(folder / required):
                 issues.append(Issue("STRUCT-03", f"{relative}/{required}", f"Missing {required}"))
         support = SUPPORT_DIRS.get(product, {"data-files"})
-        for child in (root / folder).iterdir():
-            if child.is_file() and child.name not in {"README.md", "setup.md"}:
-                issues.append(Issue("STRUCT-04", f"{relative}/{child.name}",
+        for child_name, is_directory in children(folder):
+            if not is_directory and child_name not in {"README.md", "setup.md"}:
+                issues.append(Issue("STRUCT-04", f"{relative}/{child_name}",
                                     "Supporting file must be in " + ", ".join(sorted(support))))
-            elif child.is_dir() and child.name not in support:
-                issues.append(Issue("STRUCT-04", f"{relative}/{child.name}",
+            elif is_directory and child_name not in support:
+                issues.append(Issue("STRUCT-04", f"{relative}/{child_name}",
                                     "Unexpected supporting directory"))
     return issues
 
@@ -67,11 +109,17 @@ def main() -> int:
     parser.add_argument("head", help="Pull request head commit SHA")
     args = parser.parse_args()
     result = subprocess.run(
-        ["git", "diff", "--name-only", "-z", f"{args.base}...{args.head}"],
+        ["git", "diff", "--name-only", "--no-renames", "-z",
+         f"{args.base}...{args.head}", "--", "industry/"],
         check=True, capture_output=True,
     )
     changed = [os.fsdecode(path) for path in result.stdout.split(b"\0") if path]
-    issues = check_changed_use_cases(Path.cwd(), changed)
+    tree = subprocess.run(
+        ["git", "ls-tree", "-r", "-z", "--name-only", args.head, "--", "industry/"],
+        check=True, capture_output=True,
+    )
+    head_paths = {os.fsdecode(path) for path in tree.stdout.split(b"\0") if path}
+    issues = check_changed_use_cases(None, changed, head_paths)
     summary = ["## Structure check", f"{len(issues)} issue(s) in changed use cases."]
     for issue in issues:
         text = f"[{issue.rule}] {issue.path}: {issue.message}"

@@ -1,18 +1,31 @@
 name: Structure check
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened]
-permissions:
-  contents: read
+permissions: {}
 jobs:
   structure:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
+      # pull_request_target loads this workflow from the base repository's default branch.
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.workflow_sha }}
           fetch-depth: 0
           persist-credentials: false
+      - name: Fetch pull request tree without checking it out
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch --no-tags --quiet origin "refs/pull/$PR_NUMBER/head"
+          actual_head="$(git rev-parse FETCH_HEAD)"
+          if [ "$actual_head" != "$EXPECTED_HEAD" ]; then
+            echo "Pull request head changed; retry the check." >&2
+            exit 1
+          fi
       - name: Check changed use cases
         run: python3 .github/scripts/check_structure.py "$BASE_SHA" "$HEAD_SHA"
         env:

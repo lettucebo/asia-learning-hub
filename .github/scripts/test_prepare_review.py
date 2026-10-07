@@ -82,6 +82,30 @@ class PrepareReviewTests(unittest.TestCase):
         self.assertTrue(result["rules_changed"])
         self.assertNotIn("STRUCT-99", prompt)
 
+    def test_deleted_file_still_includes_remaining_case_readme(self):
+        self.write("CONTRIBUTING.md", RULES)
+        self.write(f"{CASE}/README.md", "Full case instructions")
+        self.write(f"{CASE}/data-files/old.csv", "old")
+        base = self.commit("base")
+        (self.repo / f"{CASE}/data-files/old.csv").unlink()
+        head = self.commit("delete supporting file")
+
+        result = self.run_prepare(base, head)
+        self.assertFalse(result["skipped"])
+        self.assertEqual(
+            "Full case instructions",
+            (self.repo / ".review/head" / CASE / "README.md").read_text(encoding="utf-8"),
+        )
+
+    def test_required_readme_over_limit_fails_instead_of_silently_skipping(self):
+        self.write("CONTRIBUTING.md", RULES)
+        base = self.commit("base")
+        self.write(f"{CASE}/README.md", "A" * 200_001)
+        head = self.commit("large readme")
+
+        with self.assertRaisesRegex(ValueError, "exceeds 200,000 bytes"):
+            self.run_prepare(base, head)
+
     def test_skips_without_industry_changes(self):
         self.write("CONTRIBUTING.md", RULES)
         base = self.commit("base")

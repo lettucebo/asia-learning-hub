@@ -1,6 +1,6 @@
 name: Use case review
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened]
 permissions: {}
 concurrency:
@@ -21,10 +21,12 @@ jobs:
       BASE_SHA: ${{ github.event.pull_request.base.sha }}
       HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
-      # Agent, instructions, rules, and scripts all come from the trusted base commit.
+      # pull_request_target loads this workflow from the base repository's default branch.
+      # Pin automation to the workflow's trusted default-branch revision. The PR base
+      # SHA is data only; its tree is never checked out or executed.
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.base.sha }}
+          ref: ${{ github.workflow_sha }}
           fetch-depth: 0
           persist-credentials: false
       - name: Decide whether to review
@@ -48,7 +50,15 @@ jobs:
           fi
       - name: Fetch the pull request head
         if: steps.guard.outputs.run == 'true'
-        run: git fetch --no-tags --quiet origin "$HEAD_SHA"
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          git fetch --no-tags --quiet origin "refs/pull/$PR_NUMBER/head"
+          actual_head="$(git rev-parse FETCH_HEAD)"
+          if [ "$actual_head" != "$HEAD_SHA" ]; then
+            echo "Pull request head changed; retry the review." >&2
+            exit 1
+          fi
       - name: Prepare review inputs
         id: prepare
         if: steps.guard.outputs.run == 'true'
@@ -62,6 +72,9 @@ jobs:
         if: steps.prepare.outputs.skipped == 'false'
         with:
           node-version: '24'
+      - name: Install Copilot CLI
+        if: steps.prepare.outputs.skipped == 'false'
+        run: npm install --global @github/copilot@1.0.92 --no-fund --no-audit --ignore-scripts
       - name: Run the use-case-review agent with Copilot CLI
         if: steps.prepare.outputs.skipped == 'false'
         env:
@@ -69,9 +82,9 @@ jobs:
           MODEL: ${{ vars.COPILOT_REVIEW_MODEL }}
           MAX_AI_CREDITS: ${{ vars.COPILOT_REVIEW_MAX_AI_CREDITS || '100' }}
         run: |
-          npm install -g @github/copilot --no-fund --no-audit --loglevel=error
           args=(--agent use-case-review -s --no-ask-user --available-tools=view
-                --allow-tool=read --max-ai-credits "$MAX_AI_CREDITS")
+                --allow-tool=read --disable-builtin-mcps --disallow-temp-dir
+                --max-ai-credits "$MAX_AI_CREDITS")
           if [ -n "$MODEL" ]; then args+=(--model "$MODEL"); fi
           if ! copilot "${args[@]}" -p "$(cat .review/prompt.md)" \
               > .review/ai-summary.md 2> .review/copilot-error.log; then
@@ -103,7 +116,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.base.sha }}
+          ref: ${{ github.workflow_sha }}
+          fetch-depth: 0
           persist-credentials: false
       - name: Publish the review to the pull request
         env:
