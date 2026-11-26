@@ -1,0 +1,4 @@
+promo_id,promo_name,category,start_week,end_week,discount_pct,stores,budget_usd,status
+PR-2506-02,Footwear Refresh,Footwear,2025-W19,2025-W24,20,Metro North,18000,Active
+PR-2506-01,Summer Layer Event,Apparel,2025-W24,2025-W25,25,All stores,22000,Planned
+PR-2506-03,Kitchen Starter Bundle,Kitchen,2025-W25,2025-W26,15,Metro North,9000,Planned

@@ -1,0 +1,17 @@
+Week,Plant,Line,Product Family,Supplier,Material Group,First Pass Yield Target,First Pass Yield Actual,Scrap Rate,Defect PPM,Customer Complaints,Late PO Lines,Expedite Cost USD,Production Impact Hours,Containment Status,CAPA Status,Risk Rating
+W40,Plant A,Line 1,Power Module,Supplier Nova,PCB,0.98,0.97499999999999998,2.4E-2,980,2,2,3200,4,Closed,Closed,Low
+W40,Plant A,Line 2,Control Board,Supplier Delta,Housing,0.98,0.96199999999999997,3.5999999999999997E-2,1480,4,2,2800,5,Open,In Progress,Medium
+W40,Plant B,Line 1,Drive Train,Supplier Apex,Drive Shaft,0.98,0.96799999999999997,0.03,1210,3,2,2600,3,Closed,Closed,Low
+W40,Plant B,Line 2,Sensor Pack,Supplier Orion,Sensors,0.98,0.97099999999999997,2.8000000000000001E-2,1090,2,1,1900,2,Closed,Closed,Low
+W41,Plant A,Line 1,Power Module,Supplier Nova,PCB,0.98,0.96899999999999997,2.9000000000000001E-2,1260,3,5,6400,9,Open,In Progress,Medium
+W41,Plant A,Line 2,Control Board,Supplier Delta,Housing,0.98,0.95199999999999996,4.3999999999999997E-2,1860,6,4,5900,8,Open,Open,High
+W41,Plant B,Line 1,Drive Train,Supplier Apex,Drive Shaft,0.98,0.94899999999999995,4.5999999999999999E-2,1930,7,5,6100,10,Open,Open,High
+W41,Plant B,Line 2,Sensor Pack,Supplier Orion,Sensors,0.98,0.95799999999999996,4.1000000000000002E-2,1710,5,3,4300,6,Open,In Progress,High
+W42,Plant A,Line 1,Power Module,Supplier Nova,PCB,0.98,0.93600000000000005,5.1999999999999998E-2,2540,11,8,9800,16,Open,Open,Critical
+W42,Plant A,Line 2,Control Board,Supplier Delta,Housing,0.98,0.92800000000000005,6.0999999999999999E-2,2890,13,6,8400,13,Open,Open,Critical
+W42,Plant B,Line 1,Drive Train,Supplier Apex,Drive Shaft,0.98,0.93400000000000005,5.8000000000000003E-2,2670,10,6,9100,14,Open,Open,Critical
+W42,Plant B,Line 2,Sensor Pack,Supplier Orion,Sensors,0.98,0.94099999999999995,5.3999999999999999E-2,2410,9,4,6200,9,Open,In Progress,Critical
+W43,Plant A,Line 1,Power Module,Supplier Nova,PCB,0.98,0.97699999999999998,2.1999999999999999E-2,910,1,1,1700,2,Closed,Closed,Low
+W43,Plant A,Line 2,Control Board,Supplier Delta,Housing,0.98,0.97099999999999997,2.7E-2,1140,2,1,1500,2,Closed,Closed,Low
+W43,Plant B,Line 1,Drive Train,Supplier Apex,Drive Shaft,0.98,0.97399999999999998,2.3E-2,980,2,1,1800,2,Closed,Closed,Low
+W43,Plant B,Line 2,Sensor Pack,Supplier Orion,Sensors,0.98,0.97599999999999998,2.1000000000000001E-2,860,1,1,1200,1,Closed,Closed,Low

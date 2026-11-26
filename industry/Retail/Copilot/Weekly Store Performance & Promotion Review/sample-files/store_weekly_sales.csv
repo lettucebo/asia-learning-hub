@@ -1,0 +1,65 @@
+week,store_id,store_name,region,category,net_sales_usd,sales_target_usd,units_sold,gross_margin_pct,promo_active
+2025-W19,S101,Harbor Central,Metro North,Apparel,57948,57000,1379,45.1,No
+2025-W19,S101,Harbor Central,Metro North,Footwear,67861,67000,1785,40.1,Yes
+2025-W19,S101,Harbor Central,Metro North,Home,27714,31000,602,42.3,No
+2025-W19,S101,Harbor Central,Metro North,Kitchen,38632,37000,919,45.2,No
+2025-W19,S102,Pine Street,Metro North,Apparel,46051,49000,1211,46.0,No
+2025-W19,S102,Pine Street,Metro North,Footwear,49967,58000,1189,38.7,Yes
+2025-W19,S102,Pine Street,Metro North,Home,22522,27000,592,39.2,No
+2025-W19,S102,Pine Street,Metro North,Kitchen,27776,32000,603,41.4,No
+2025-W19,S103,Riverside,Coastal East,Apparel,38597,46000,918,42.8,No
+2025-W19,S103,Riverside,Coastal East,Footwear,51862,54000,1234,45.8,No
+2025-W19,S103,Riverside,Coastal East,Home,26956,25000,709,43.4,No
+2025-W19,S103,Riverside,Coastal East,Kitchen,25631,30000,557,44.0,No
+2025-W19,S104,Hillcrest,Coastal East,Apparel,55681,53000,1325,38.9,No
+2025-W19,S104,Hillcrest,Coastal East,Footwear,58927,62000,1403,38.0,No
+2025-W19,S104,Hillcrest,Coastal East,Home,30062,29000,653,40.1,No
+2025-W19,S104,Hillcrest,Coastal East,Kitchen,33956,35000,893,42.1,No
+2025-W20,S101,Harbor Central,Metro North,Apparel,48560,57000,1055,40.4,No
+2025-W20,S101,Harbor Central,Metro North,Footwear,67783,67000,1473,39.6,Yes
+2025-W20,S101,Harbor Central,Metro North,Home,28897,31000,760,42.3,No
+2025-W20,S101,Harbor Central,Metro North,Kitchen,38983,37000,847,45.3,No
+2025-W20,S102,Pine Street,Metro North,Apparel,48984,49000,1166,38.2,No
+2025-W20,S102,Pine Street,Metro North,Footwear,63726,58000,1517,39.9,Yes
+2025-W20,S102,Pine Street,Metro North,Home,24091,27000,523,45.6,No
+2025-W20,S102,Pine Street,Metro North,Kitchen,27062,32000,644,44.5,No
+2025-W20,S103,Riverside,Coastal East,Apparel,51216,46000,1113,44.1,No
+2025-W20,S103,Riverside,Coastal East,Footwear,36161,54000,860,45.6,No
+2025-W20,S103,Riverside,Coastal East,Home,21738,25000,472,45.0,No
+2025-W20,S103,Riverside,Coastal East,Kitchen,28408,30000,747,45.4,No
+2025-W20,S104,Hillcrest,Coastal East,Apparel,55469,53000,1205,39.6,No
+2025-W20,S104,Hillcrest,Coastal East,Footwear,56638,62000,1231,43.2,No
+2025-W20,S104,Hillcrest,Coastal East,Home,27591,29000,599,41.6,No
+2025-W20,S104,Hillcrest,Coastal East,Kitchen,31303,35000,823,40.7,No
+2025-W21,S101,Harbor Central,Metro North,Apparel,55096,57000,1449,38.7,No
+2025-W21,S101,Harbor Central,Metro North,Footwear,53432,67000,1161,43.0,Yes
+2025-W21,S101,Harbor Central,Metro North,Home,26723,31000,703,44.9,No
+2025-W21,S101,Harbor Central,Metro North,Kitchen,30193,37000,794,40.2,No
+2025-W21,S102,Pine Street,Metro North,Apparel,45896,49000,997,35.1,No
+2025-W21,S102,Pine Street,Metro North,Footwear,61923,58000,1346,42.6,Yes
+2025-W21,S102,Pine Street,Metro North,Home,23385,27000,556,44.5,No
+2025-W21,S102,Pine Street,Metro North,Kitchen,27226,32000,716,43.3,No
+2025-W21,S103,Riverside,Coastal East,Apparel,41331,46000,984,37.7,No
+2025-W21,S103,Riverside,Coastal East,Footwear,42438,54000,922,43.2,No
+2025-W21,S103,Riverside,Coastal East,Home,24586,25000,647,41.2,No
+2025-W21,S103,Riverside,Coastal East,Kitchen,26824,30000,705,40.0,No
+2025-W21,S104,Hillcrest,Coastal East,Apparel,45090,53000,1073,35.1,No
+2025-W21,S104,Hillcrest,Coastal East,Footwear,52625,62000,1252,40.0,No
+2025-W21,S104,Hillcrest,Coastal East,Home,30858,29000,734,44.5,No
+2025-W21,S104,Hillcrest,Coastal East,Kitchen,36557,35000,962,38.4,No
+2025-W22,S101,Harbor Central,Metro North,Apparel,63828,57000,1679,41.8,No
+2025-W22,S101,Harbor Central,Metro North,Footwear,73560,67000,1935,39.3,Yes
+2025-W22,S101,Harbor Central,Metro North,Home,29936,31000,787,44.9,No
+2025-W22,S101,Harbor Central,Metro North,Kitchen,40357,37000,1062,41.0,No
+2025-W22,S102,Pine Street,Metro North,Apparel,54664,49000,1301,41.4,No
+2025-W22,S102,Pine Street,Metro North,Footwear,61221,58000,1457,41.4,Yes
+2025-W22,S102,Pine Street,Metro North,Home,29894,27000,649,43.3,No
+2025-W22,S102,Pine Street,Metro North,Kitchen,30912,32000,813,40.4,No
+2025-W22,S103,Riverside,Coastal East,Apparel,51088,46000,1110,39.9,No
+2025-W22,S103,Riverside,Coastal East,Footwear,35309,54000,840,38.5,No
+2025-W22,S103,Riverside,Coastal East,Home,24881,25000,540,45.4,No
+2025-W22,S103,Riverside,Coastal East,Kitchen,29380,30000,773,45.7,No
+2025-W22,S104,Hillcrest,Coastal East,Apparel,44734,53000,1177,34.5,No
+2025-W22,S104,Hillcrest,Coastal East,Footwear,52104,62000,1371,41.2,No
+2025-W22,S104,Hillcrest,Coastal East,Home,31972,29000,695,40.0,No
+2025-W22,S104,Hillcrest,Coastal East,Kitchen,34942,35000,759,38.7,No

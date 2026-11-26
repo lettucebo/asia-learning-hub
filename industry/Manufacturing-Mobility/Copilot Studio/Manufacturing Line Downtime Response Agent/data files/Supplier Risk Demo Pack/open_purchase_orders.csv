@@ -1,0 +1,4 @@
+po_id,supplier,material_code,qty,expected_date,status,line_impact
+PO-88214,Shakti Components,MAT-BRG-220,5000,2026-10-24,Delayed,High
+PO-88277,Delta Polymers,MAT-SEAL-118,12000,2026-10-27,In Transit,Medium
+PO-88310,Orion Metals,MAT-SHT-442,3000,2026-10-26,Delayed,High

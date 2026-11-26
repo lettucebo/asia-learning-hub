@@ -1,0 +1,13 @@
+CheckID,Channel,Check,Mandatory,Status,DueAt,OwnerRole,EvidenceID,EvidenceSummary
+LC-01,Online,Product descriptions approved,Yes,Complete,2026-11-12 17:00,Digital Merchandising Lead,E-01,Approved copy recorded
+LC-02,Online,Product images approved,Yes,Complete,2026-11-12 17:00,Brand Lead,E-02,Approved image pack recorded
+LC-03,Online,Stock availability feed tested,Yes,Complete,2026-11-13 10:00,Inventory Lead,E-03,Feed test passed
+LC-04,Online,Checkout discount matches approved offer,Yes,Blocked,2026-11-13 11:00,Digital Commerce Lead,E-04,Checkout applies 15 percent instead of approved 10 percent
+LC-05,Store,Price file validated,Yes,Complete,2026-11-13 10:00,Pricing Lead,E-05,Price file test passed
+LC-06,Store,Colleague briefing completed,Yes,Complete,2026-11-13 10:00,Store Operations Lead,E-06,Briefing completion recorded
+LC-07,Store,Offer artwork approved,Yes,Blocked,2026-11-13 15:00,Brand Lead,E-07,Artwork still shows expired buy-two offer
+LC-08,Store,Fixture allocation confirmed,Yes,Complete,2026-11-12 17:00,Store Operations Lead,E-08,Fixture plan approved
+LC-09,Shared,Customer service response approved,Yes,Complete,2026-11-13 10:00,Customer Care Lead,E-09,Response guide approved
+LC-10,Shared,Offer terms approved,Yes,Complete,2026-11-12 17:00,Commercial Lead,E-10,Ten percent offer terms approved
+LC-11,Social,Optional creator captions ready,No,In progress,2026-11-13 11:00,Social Lead,E-11,Captions awaiting final edit
+LC-12,Social,Optional teaser scheduled,No,Complete,2026-11-13 09:00,Social Lead,E-12,Approved teaser schedule recorded

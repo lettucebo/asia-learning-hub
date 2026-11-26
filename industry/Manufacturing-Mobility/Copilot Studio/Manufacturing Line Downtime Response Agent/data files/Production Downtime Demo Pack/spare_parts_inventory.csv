@@ -1,0 +1,4 @@
+﻿part_no,description,on_hand,reorder_level,lead_time_days,primary_machine
+SP-HTR-221,Heater Coil Module,3,8,12,FM-12
+SP-MTR-903,Conveyor Motor,6,6,9,CV-03
+SP-SNS-144,Optical Sensor,9,10,5,PK-07

@@ -1,0 +1,39 @@
+JUNIPER LANE RETAIL - RETURNS DECISION BRIEF
+Synthetic demonstration. Reference date: 13 November 2026, end of day.
+
+DATA DEFINITIONS
+Sales cohort: units sold from 1 to 14 October 2026, inclusive.
+Observed through: 13 November 2026. Every sale has at least 30 calendar
+days of observation after the sale date. This is a fixed observation
+cutoff, not a claim that every shopper has the same return entitlement.
+ReturnedUnits counts distinct originally sold units returned once by
+the cutoff; exclude cancelled orders, exchanges, duplicate returns,
+and units from other sales cohorts. Each unit belongs to one SKU/channel.
+SoldUnits is gross completed units for the cohort before these returns.
+RefundCU is the actual merchandise refund amount for these units,
+excluding shipping, tax, recovery, processing cost, and lost margin.
+All units of each SKU in this sample were sold at the same price.
+PrimaryReportedReason is the dominant reported reason for that row,
+not a reason assigned to every returned unit. Reason-level counts are
+not supplied and must not be invented.
+Do not average row rates; aggregate numerators and denominators first.
+All financial amounts are fictional currency units (CU).
+
+OBSERVATIONS - NOT CONFIRMED CAUSES
+O-01: Digital Merchandising reports that the online jacket size guide
+was last reviewed in July. Store colleagues say shoppers often try the
+jacket on in store. Neither observation proves why customers returned it.
+O-02: Quality Desk received three leaking-lid comments mentioning bottle
+batch B7. Batch-level sales and return counts, inspection findings,
+and a comparison batch are missing.
+O-03: Fulfilment reports that online mug packaging changed on 5 October.
+Order-level packaging version, damage photos, and carrier handling
+records are missing. Channel mix alone cannot isolate a packaging effect.
+
+DECISION RULES
+Prioritize investigations by measured exposure and evidence gaps.
+Propose owner roles, not invented people or agreed commitments.
+Do not promise savings from refunds: recovery and intervention cost are unknown.
+Do not recommend a supplier chargeback, recall, or withdrawal as approved.
+Any real product-safety concern must go to the retailer's accountable team.
+The demonstration is not a product safety or legal assessment.

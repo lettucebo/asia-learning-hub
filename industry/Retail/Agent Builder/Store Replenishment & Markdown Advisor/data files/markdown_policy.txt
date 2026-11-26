@@ -1,0 +1,50 @@
+# Juniper Lane Retail: Store Replenishment and Markdown Policy (Demo)
+
+> Synthetic policy for demonstration only. Not Juniper Lane's real policy and not a substitute for your own approved merchandising rules.
+
+## 1. Stock cover targets
+
+| Item type | Target weeks of cover | Notes |
+|-----------|----------------------|-------|
+| Core basics (Home, Kitchen) | 3 to 6 weeks | Replenish on a standing cycle |
+| Trend items (Apparel, Footwear) | 2 to 4 weeks | Shorter cover because styles change quickly |
+
+Weeks of cover = on-hand units / average weekly units sold over the last 8 weeks.
+
+## 2. Stock flags
+
+| Flag | Rule | Required response |
+|------|------|-------------------|
+| Stockout risk | Weeks of cover below 2.0 | Check on-order ETA. Do not start a new markdown. Ask the regional team about a transfer. |
+| OK | Weeks of cover from 2.0 to 8.0 | No action beyond the normal replenishment cycle. |
+| Overstock risk | Weeks of cover above 8.0 | Transfer first (see section 3). Markdown only if transfer is not possible. |
+
+## 3. Transfers before markdowns
+
+1. Look for another store in the same region with weeks of cover below 4.0 for the same SKU.
+2. A transfer is viable if the receiving store has weeks of cover below 4.0 and the sending store stays at or above 2.0 after the move.
+3. Transfers must be completed within 14 days. If not, move to a markdown review.
+
+## 4. Markdown rules
+
+- Markdown depth is capped at 30% without Regional Merchandising Director approval.
+- Markdowns above 25% need Regional Merchandising Director approval.
+- Do not stack a markdown on a SKU that already has an active promotion at the same store. Note the conflict instead.
+- Do not start a markdown on a SKU with stockout risk at that store.
+- Markdown proposals must state the expected units to clear and the expected margin impact.
+
+## 5. Supplier lead times
+
+- Use the supplier lead time and on-time reliability in the supplier file.
+- If an on-order delivery arrives after the item runs out, flag the gap and recommend an expedite request or a transfer.
+- Reliability below 90% on time means add one extra week to any cover calculation.
+
+## 6. Data freshness
+
+- Inventory snapshots older than 7 days are stale, measured against the demo as-of date (2025-06-06). Say so and do not give a final recommendation without a refresh.
+- Promotions with status "Ended" are not active. Promotions with status "Planned" are not active until their start date.
+
+## 7. Human approval
+
+- All outputs are recommendations. Store managers and merchandising leads confirm every action.
+- Do not promise customers stock, delivery dates or discounts that are not in the approved data.

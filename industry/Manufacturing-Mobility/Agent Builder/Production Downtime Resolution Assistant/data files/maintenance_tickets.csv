@@ -1,0 +1,4 @@
+﻿ticket_id,created_at,line_id,machine_id,issue,priority,status,owner
+MT-14021,2026-10-18T02:26:00,P-204,FM-12,Overheat and emergency stop,High,Open,Ravi Kumar
+MT-14037,2026-10-19T21:22:00,P-204,FM-12,Coolant flow instability,High,In Progress,Aditi Sharma
+MT-14074,2026-10-21T04:05:00,P-204,CV-03,Motor vibration above threshold,Medium,Open,Sameer Rao

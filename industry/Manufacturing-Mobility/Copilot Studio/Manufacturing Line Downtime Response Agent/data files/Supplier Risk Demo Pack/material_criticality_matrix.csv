@@ -1,0 +1,4 @@
+material_code,description,criticality,primary_line,alternate_supplier
+MAT-BRG-220,Bearing Assembly,High,Line A,No
+MAT-SEAL-118,Seal Ring,Medium,Line B,Yes
+MAT-SHT-442,Sheet Metal Panel,High,Line A,Limited

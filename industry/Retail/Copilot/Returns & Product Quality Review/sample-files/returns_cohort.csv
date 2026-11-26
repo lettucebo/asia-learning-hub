@@ -1,0 +1,11 @@
+SKU,Product,Channel,CohortStart,CohortEnd,ObservedThrough,SoldUnits,ReturnedUnits,RefundCU,PrimaryReportedReason
+JKT-01,Trail Jacket,Online,2026-10-01,2026-10-14,2026-11-13,100,20,1600,Size mismatch
+JKT-01,Trail Jacket,Store,2026-10-01,2026-10-14,2026-11-13,100,5,400,Size mismatch
+BTL-01,Insulated Bottle,Online,2026-10-01,2026-10-14,2026-11-13,200,12,300,Leaking lid
+BTL-01,Insulated Bottle,Store,2026-10-01,2026-10-14,2026-11-13,100,3,75,Leaking lid
+MUG-01,Ceramic Mug Set,Online,2026-10-01,2026-10-14,2026-11-13,150,18,360,Arrived damaged
+MUG-01,Ceramic Mug Set,Store,2026-10-01,2026-10-14,2026-11-13,100,2,40,Arrived damaged
+SHO-01,Everyday Trainer,Online,2026-10-01,2026-10-14,2026-11-13,100,8,480,Fit preference
+SHO-01,Everyday Trainer,Store,2026-10-01,2026-10-14,2026-11-13,150,6,360,Fit preference
+TOT-01,Canvas Tote,Online,2026-10-01,2026-10-14,2026-11-13,80,4,60,Changed mind
+TOT-01,Canvas Tote,Store,2026-10-01,2026-10-14,2026-11-13,120,2,30,Changed mind
