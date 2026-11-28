@@ -1,0 +1,9 @@
+JUNIPER LANE RETAIL - DEMO ORDER SNAPSHOT
+Fictional records derived from orders.csv. All timestamps use the same fictional business time zone as Recovery Policy 1.0. This is not a live order or stock system.
+
+OrderID=CC-101; Store=Harbor Central; Status=Picking; SnapshotAt=2026-11-13 11:50; PromiseAt=2026-11-13 12:00; NoticeSent=No; AlternativeAvailable=Unknown; CustomerConsent=Unknown
+OrderID=CC-102; Store=Pine Street; Status=Ready; SnapshotAt=2026-11-13 11:50; PromiseAt=2026-11-13 13:00; NoticeSent=No; AlternativeAvailable=NotApplicable; CustomerConsent=NotApplicable
+OrderID=CC-103; Store=Harbor Central; Status=ShortPicked; SnapshotAt=2026-11-13 11:50; PromiseAt=2026-11-13 14:00; NoticeSent=No; AlternativeAvailable=Yes; CustomerConsent=No
+OrderID=CC-104; Store=Riverside; Status=Collected; SnapshotAt=2026-11-13 11:50; PromiseAt=2026-11-13 11:00; NoticeSent=Yes; AlternativeAvailable=NotApplicable; CustomerConsent=NotApplicable
+OrderID=CC-105; Store=Hillcrest; Status=Cancelled; SnapshotAt=2026-11-13 11:50; PromiseAt=2026-11-13 12:00; NoticeSent=No; AlternativeAvailable=NotApplicable; CustomerConsent=NotApplicable
+OrderID=CC-106; Store=Pine Street; Status=Picking; SnapshotAt=2026-11-13 09:00; PromiseAt=2026-11-13 13:00; NoticeSent=No; AlternativeAvailable=Unknown; CustomerConsent=Unknown

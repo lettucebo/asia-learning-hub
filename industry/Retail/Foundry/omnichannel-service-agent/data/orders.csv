@@ -1,0 +1,7 @@
+OrderID,Store,Status,SnapshotAt,PromiseAt,NoticeSent,AlternativeAvailable,CustomerConsent
+CC-101,Harbor Central,Picking,2026-11-13 11:50,2026-11-13 12:00,No,Unknown,Unknown
+CC-102,Pine Street,Ready,2026-11-13 11:50,2026-11-13 13:00,No,NotApplicable,NotApplicable
+CC-103,Harbor Central,ShortPicked,2026-11-13 11:50,2026-11-13 14:00,No,Yes,No
+CC-104,Riverside,Collected,2026-11-13 11:50,2026-11-13 11:00,Yes,NotApplicable,NotApplicable
+CC-105,Hillcrest,Cancelled,2026-11-13 11:50,2026-11-13 12:00,No,NotApplicable,NotApplicable
+CC-106,Pine Street,Picking,2026-11-13 09:00,2026-11-13 13:00,No,Unknown,Unknown

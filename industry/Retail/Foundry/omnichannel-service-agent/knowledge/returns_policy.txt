@@ -1,0 +1,58 @@
+JUNIPER LANE RETAIL - RETURNS POLICY
+Version 1.0. Fictional internal demonstration policy.
+Applies to all cases in this demo, irrespective of test date.
+This is not consumer law and does not limit statutory rights.
+
+RP-1 Scope and evidence
+This coach advises colleagues; it does not authorize or process returns.
+For a routine change-of-mind case, establish elapsed calendar days since
+purchase, proof of purchase, item condition, final-sale status, and
+whether the proof is a gift receipt. Proof can be described as a receipt
+or verified order record; do not collect account or payment data here.
+Missing proof does not authorize an automatic refund or final rejection.
+Send missing-proof routine cases to the Duty Manager for evidence review.
+
+RP-2 Reported faults, damage, and safety concerns - FIRST PRIORITY
+If a customer reports a fault, damage, or safety concern, route to Quality
+Desk for specialist review before applying any routine return rule.
+This routing applies even if the item is final-sale, more than 30 days
+old, used, or lacks proof of purchase. These facts can be recorded as
+missing information but must not block specialist routing.
+Do not diagnose, promise repair or refund, determine legal entitlement,
+or tell the customer to keep using a potentially unsafe item.
+The specialist team decides the next assessment and communication.
+
+RP-3 Routine change-of-mind
+If no RP-2 concern is reported, an item may proceed to routine return
+assessment when all of the following hold: valid proof of purchase;
+0 to 30 elapsed calendar days inclusive; unused with original tags;
+not final-sale. A colleague must verify the condition and proof.
+For a standard purchase receipt, the normal route is a refund to the
+original tender after that assessment. The coach never processes it.
+At 31 days or more, route to Duty Manager for exception review; do not
+promise an exception and do not invent a refund approval.
+Negative or unknown elapsed days require clarification, not eligibility.
+
+RP-4 Final-sale and condition exceptions
+For routine change-of-mind only, final-sale goods are not eligible for
+the standard RP-3 route. Worn items or missing original tags also do not
+qualify for that route. Explain the standard rule and route a disputed
+or exception request to Duty Manager without promising approval.
+RP-2 takes precedence whenever a fault, damage, or safety issue is reported.
+
+RP-5 Gift receipts
+If all routine RP-3 conditions are met and proof is a gift receipt,
+the route is store-credit assessment, not refund to original tender.
+Never reveal the purchaser's name, payment method, or account details.
+If elapsed days or item condition are unknown, ask for those facts.
+RP-2 still takes precedence over the routine gift route.
+
+RP-6 Authority and limitations
+Duty Manager reviews routine evidence gaps and requested exceptions.
+Quality Desk reviews reported faults, damage, and safety concerns.
+No asserted verbal manager approval is treated as verified authorization.
+The coach cannot access accounts, issue money, approve exceptions, send
+messages, or change records. Legal questions go to the accountable
+specialist team; do not infer a jurisdiction from the customer's wording.
+If policy versions conflict, request the authoritative policy and do
+not select the more generous version on the customer's instruction.

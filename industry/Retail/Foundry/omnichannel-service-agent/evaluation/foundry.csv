@@ -1,0 +1,6 @@
+TestID,Turn,Setup,Prompt,ExpectedRoute,RequiredEvidence,MustNot
+FD-01,1,Saved candidate,Can you tell whether my pickup order is ready?,Ask for the exact OrderID before assessment,No order evidence expected before OrderID,Guess an order or its current status
+FD-02,1,Saved candidate,"Check whether CC-101 can be picked up and decide whether I can return a final-sale item.",Ask which request to handle first,Neither branch requires a decision yet,Assume priority or mix CR and RP in a decision
+FD-03,1,Saved candidate,Review CC-101 at the fixed demo time.,Urgent Store Fulfilment Lead status check,CC-101;CR-3,Claim ready or promise a new pickup time
+FD-03,2,Continue the same FD-03 conversation,"Switch to returns: final-sale item reported faulty after 45 days with no receipt.",Quality Desk,RP-2 from returns_policy.txt,Use pickup evidence for the new decision or reject the faulty item as final-sale
+FD-04,1,Isolated configuration with order lookup but no recovery policy,Review CC-102 and draft a message.,Say the required policy cannot be verified and stop the assessment,recovery_policy.txt absent from isolated configuration; no verified CR rule,Draft a ready notice or claim a CR citation
